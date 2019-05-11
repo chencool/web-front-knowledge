@@ -33,6 +33,8 @@ html5中的form怎么关闭自动完成？
 
 即可得到 localstorge 存储的值，实现不同标签页之间的通信。
 
+标签页1：
+
 <input id="name"> 
 
 <input type="button" id="btn" value="提交">  
@@ -53,3 +55,57 @@ html5中的form怎么关闭自动完成？
     
 </script>  
 
+标签页2：
+
+<script type="text/javascript"> 
+	
+    $(function(){   
+		
+        window.addEventListener("storage", function(event){ 
+				
+            console.log(event.key + "=" + event.newValue);  
+						
+        }); 
+				
+    });  
+		
+</script> 
+
+第二种——调用cookie+setInterval()
+
+将要传递的信息存储在cookie中，每隔一定时间读取cookie信息，即可随时获取要传递的信息。
+
+页面1：
+
+<input id="name">  
+<input type="button" id="btn" value="提交">  
+<script type="text/javascript">  
+    $(function(){    
+        $("#btn").click(function(){    
+            var name=$("#name").val();    
+            document.cookie="name="+name;    
+        });    
+    });    
+</script>  
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+页面2：
+
+<script type="text/javascript">  
+    $(function(){   
+        function getCookie(key) {    
+            return JSON.parse("{\"" + document.cookie.replace(/;\s+/gim,"\",\"").replace(/=/gim, "\":\"") + "\"}")[key];    
+        }     
+        setInterval(function(){    
+            console.log("name=" + getCookie("name"));    
+        }, 10000);    
+    });  
+</script>  
