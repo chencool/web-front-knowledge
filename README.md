@@ -87,16 +87,6 @@ html5中的form怎么关闭自动完成？
         });    
     });    
 </script>  
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
 页面2：
 
 <script type="text/javascript">  
