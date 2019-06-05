@@ -1,0 +1,44 @@
+先Git 全局设置:
+//即修改用户名和邮箱地址
+git config --global user.name "ASxx" //这个是当前电脑的用户名，一般不可换
+git config --global user.email "123456789@qq.com"//用户名和邮箱地址是本地git客户端的一个变量
+每次commit都会用用户名和邮箱纪录。github的contributions统计就是按邮箱来统计的，邮箱可以改的。
+
+查看用户名和邮箱地址
+git config user.name
+git config user.email
+或者git config --list  //查看所有信息
+
+配置好用户名邮箱后
+在vscode中点击终端-新建终端
+在终端中输入git init ->git add. ->git commit -m '本次提交的信息'->git pull origin master(或者其他分支名称，如develop)
+->有冲突先解决冲突,没有冲突继续执行->git push origin master(或者其他分支名称，如develop)
+如果本次是在本地新建的项目，没有远程路径，在commit完之后执行git remote add origin https://git.oschina.net/name/package.git   //用你仓库的url，给本地仓库关联一个远程仓库
+然后再执行git pull origin master(或者其他分支名称，如develop)->有冲突先解决冲突,没有冲突继续执行->git push origin master(或者其他分支名称，如develop)  //提交到你的仓库
+如果commit完之后想撤回提交，先执行git log查看并copy提交的版本号，然后执行git reset --hard 版本号   //回退到当前版本，或者git reset --hard HEAD^（回退到上一版本），
+此处HEAD^的^代表上一次提交，如果^^即上上次，假设有100次，HEAD~100方式处理会更好
+
+版本回退
+1.本地代码（或文件）已经add但是还未commit；
+2.要回退的commit的代码已经commit了，但是还未push到远程个人repository
+git reset [commit]
+git revert [commit]
+git reset  --hard 
+git revert与reset的区别是git revert会生成一个新的提交来撤销某次提交，此次提交之前的commit都会被保留，也就是说对于项目的版本历史来说是往前走的。而git reset 则是回到某次提交，类似于穿越时空。
+相应的解决方法。
+git reflog
+命令来找回你的数据。
+
+3. 要回退的commit的代码已经push到远程的个人分支，但是还未merge到公共的repository
+对于第三种情况，如果你的远程分支只有你一个人用的话，那么可以在先使用git reset [commit]回退，如何使用git push -f [commit]来强制更新你的远程库
+
+4. 要回退的commit的代码已被merge（合入)到公共的repository
+ 对于最后一种情况，考虑到其他人的版本历史，使用git reset [commit]是不建议的，此时我们应该使用git revert [commit]改命令不会修改之前的提交历史，相当于对数据做了一次逆操作，然后再执行add，commit等命令。
+
+对于前三种情况，虽然git revert也适用，但是如要要保持版本历史干净的话，建议还是用 git reset
+3，但是希望保留完整的历史的话，还是使用git revert为好。对于和其他人协同的项目，使用git rever是最好的。
+
+rm test.txt 删除某个文件
+现在你有两个选择，一是确实要从版本库中删除该文件，那就用命令git rm删掉，并且git commit：
+另一种情况是删错了，因为版本库里还有呢，所以可以很轻松地把误删的文件恢复到最新版本：
+$ git checkout -- test.txt
